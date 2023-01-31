@@ -1,0 +1,14 @@
+fastapi[all]
+fastapi == 0.65.0
+fastapi-redis-cache
+pydantic
+pandas
+matplotlib
+tqdm
+networkx
+numpy
+uvicorn
+pytest
+flake8
+scipy
+wily

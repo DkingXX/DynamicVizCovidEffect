@@ -1,0 +1,66 @@
+# This file is a template, and might need editing before it works on your project.
+# Official framework image. Look for the different tagged releases at:
+# https://hub.docker.com/r/library/node/tags/
+# Pick zero or more services to be used on all builds.
+# Only needed when using a docker container to run your tests in.
+# Check out: http://docs.gitlab.com/ee/ci/docker/using_docker_images.html#what-is-a-service
+
+# This folder is cached between builds
+# http://docs.gitlab.com/ee/ci/yaml/README.html#cache
+cache:
+  paths:
+    - node_modules/
+
+install_dependencies:
+  stage: build
+  script:
+    - cd client
+    - npm config set registry http://registry.npmjs.org/  
+    - apt -y install dnsutils
+    - dig www.npmjs.com @1.1.1.1
+    - npm config set strict-ssl false
+    - npm install
+    - ls
+    - npm run build 
+  artifacts:
+      expire_in: 1 week
+      paths:
+        - node_modules/
+  cache:
+    key: client
+    paths:
+      - cache/
+
+eslint:
+  stage: style
+  before_script:
+    - npm i -g eslint-cli
+    - npm i @vue/cli-service
+    - npm i eslint --save-dev
+    - npm i eslint-plugin-security --save-dev
+    - npm i @vue/cli-plugin-babel 
+    - npm install @vue/cli-plugin-eslint --save-dev --force
+    - npm install --save-dev eslint eslint-plugin-vue
+    - npm install
+    - npm install babel-eslint
+  script:
+    - cd client
+    - npm run lint
+  allow_failure: true
+  cache:
+    key: client
+    paths:
+      - cache/
+
+
+frontend test:
+  stage: test
+  script:
+    - cd client
+  cache:
+    key: client
+    paths:
+      - cache/
+
+
+  

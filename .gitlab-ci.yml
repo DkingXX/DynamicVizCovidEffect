@@ -1,0 +1,13 @@
+include:
+ - server/.gitlab-ci.yml
+ - client/.gitlab-ci.yml
+
+
+stages:
+  - build
+  - style
+  - test
+  - clean
+image: node:16
+
+
